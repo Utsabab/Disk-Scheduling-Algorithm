@@ -8,7 +8,8 @@
 	for each of the following disk-scheduling algorithms?
 
 	FCFS, SSTF, SCAN, LOOK, C-SCAN, C-LOOK """
-
+import copy
+import sys
 head_position = 2150
 requests = [2069, 1212, 2296, 2800, 544, 1618, 356, 1523, 4965, 3681]
 
@@ -23,3 +24,31 @@ def FCFS(requests):
 print ("The total distance that the disk arm moves for FCFS disk-scheduling is", FCFS(requests))
 
 	
+def SSTF(requests):
+	local_requests = copy.copy(requests)
+	local_head_position = head_position
+	final_distance = 0
+	distance = 0
+	x = max(local_requests)
+	min_distance = abs(local_head_position - x)
+	while (len(local_requests) > 0):
+		for i in local_requests:
+			distance = abs(local_head_position - i)
+			if (distance < min_distance):
+				min_distance = distance
+				x = i
+		local_head_position = x
+		local_requests.remove(x)
+		final_distance += min_distance
+		if (len(local_requests) > 0):
+			min_distance = abs(local_head_position - max(local_requests))
+			x = max(local_requests)
+
+	return final_distance
+print ("The total distance that the disk arm moves for FCFS disk-scheduling is", SSTF(requests))
+
+"""def SCAN(requests):
+	local_head_position = head_position
+	end = max()"""
+
+
