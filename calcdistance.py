@@ -9,7 +9,7 @@
 
 	FCFS, SSTF, SCAN, LOOK, C-SCAN, C-LOOK """
 import copy
-import sys
+
 head_position = 2150
 requests = [2069, 1212, 2296, 2800, 544, 1618, 356, 1523, 4965, 3681]
 
@@ -29,6 +29,7 @@ def SSTF(requests):
 	local_head_position = head_position
 	final_distance = 0
 	distance = 0
+	
 	x = max(local_requests)
 	min_distance = abs(local_head_position - x)
 	while (len(local_requests) > 0):
@@ -37,6 +38,7 @@ def SSTF(requests):
 			if (distance < min_distance):
 				min_distance = distance
 				x = i
+		
 		local_head_position = x
 		local_requests.remove(x)
 		final_distance += min_distance
@@ -45,10 +47,34 @@ def SSTF(requests):
 			x = max(local_requests)
 
 	return final_distance
-print ("The total distance that the disk arm moves for FCFS disk-scheduling is", SSTF(requests))
+print ("The total distance that the disk arm moves for SSTF disk-scheduling is", SSTF(requests))
 
-"""def SCAN(requests):
+def SCAN(requests):
 	local_head_position = head_position
-	end = max()"""
+	local_requests = copy.copy(requests)
+	total_distance = 0
+
+	end = max(local_requests)
+	max_queue = 4999
+
+	for i in range(local_head_position, end):
+		if (i in local_requests):
+			total_distance += abs(local_head_position - i)
+			local_head_position = i
+			local_requests.remove(i)
+
+	total_distance += abs(local_head_position - max_queue)
+	local_head_position = max_queue
+
+	count = end 
+	while count >= 0:
+		if (count in local_requests):
+			total_distance += abs(local_head_position - count)
+			local_head_position = count 
+			local_requests.remove(count)
+		count -= 1
+
+	return total_distance
+print ("The total distance that the disk arm moves for SCAN disk-scheduling is", SCAN(requests))
 
 
