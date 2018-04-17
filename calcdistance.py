@@ -77,4 +77,33 @@ def SCAN(requests):
 	return total_distance
 print ("The total distance that the disk arm moves for SCAN disk-scheduling is", SCAN(requests))
 
+def CSCAN(requests):
+	local_head_position = head_position
+	local_requests = copy.copy(requests)
+	total_distance = 0
+
+	end = max(local_requests)
+	max_queue = 4999
+
+	for i in range(local_head_position, end):
+		if (i in local_requests):
+			total_distance += abs(local_head_position - i)
+			local_head_position = i
+			local_requests.remove(i)
+
+	total_distance += abs(local_head_position - max_queue)
+	local_head_position = 0
+
+	end = max(local_requests)
+	for y in range (0, end):
+		if (y in local_requests):
+			total_distance += abs(local_head_position - y)
+			local_head_position = y
+			local_requests.remove(y)
+
+	return total_distance
+print ("The total distance that the disk arm moves for CSCAN disk-scheduling is", CSCAN(requests))
+
+
+
 
