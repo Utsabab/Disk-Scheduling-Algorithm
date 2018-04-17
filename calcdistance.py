@@ -128,3 +128,28 @@ def LOOK(requests):
 	return total_distance
 print ("The total distance that the disk arm moves for LOOK disk-scheduling is", LOOK(requests))
 
+def CLOOK(requests):
+	local_head_position = head_position
+	local_requests = copy.copy(requests)
+	total_distance = 0
+
+	end = max(local_requests)
+
+	for i in range(local_head_position, end+1):
+		if (i in local_requests):
+			total_distance += abs(local_head_position - i)
+			local_head_position = i
+			local_requests.remove(i)
+
+	local_head_position = min(local_requests)
+
+	end = max(local_requests)
+	for y in range (local_head_position, end+1):
+		if (y in local_requests):
+			total_distance += abs(local_head_position - y)
+			local_head_position = y
+			local_requests.remove(y)
+
+	return total_distance
+print ("The total distance that the disk arm moves for CLOOK disk-scheduling is", CLOOK(requests))
+
