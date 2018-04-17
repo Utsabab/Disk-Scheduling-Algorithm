@@ -14,9 +14,9 @@ head_position = 2150
 requests = [2069, 1212, 2296, 2800, 544, 1618, 356, 1523, 4965, 3681]
 
 def FCFS(requests):
-	local_head_position = head_position
+	local_head_position = head_position   			#local head 
 	distance = 0
-	for i in requests:
+	for i in requests:								#for every cylinder calculate the distance and change the head position
 		distance += abs(local_head_position - i)
 		local_head_position = i
 	return distance 
@@ -25,26 +25,26 @@ print ("The total distance that the disk arm moves for FCFS disk-scheduling is",
 
 	
 def SSTF(requests):
-	local_requests = copy.copy(requests)
+	local_requests = copy.copy(requests)		
 	local_head_position = head_position
 	final_distance = 0
 	distance = 0
 	
-	x = max(local_requests)
-	min_distance = abs(local_head_position - x)
-	while (len(local_requests) > 0):
+	end = max(local_requests)												#maximum cylinder accessed 
+	min_distance = abs(local_head_position - end)							#calculate distance between highest cylinder and current head position for a reference distance 
+	while (len(local_requests) > 0):										#until the array is empty
 		for i in local_requests:
-			distance = abs(local_head_position - i)
-			if (distance < min_distance):
+			distance = abs(local_head_position - i)	
+			if (distance < min_distance):			
 				min_distance = distance
-				x = i
+				end = i
 		
-		local_head_position = x
-		local_requests.remove(x)
-		final_distance += min_distance
-		if (len(local_requests) > 0):
-			min_distance = abs(local_head_position - max(local_requests))
-			x = max(local_requests)
+		local_head_position = end											#change the current head position
+		local_requests.remove(end)
+		final_distance += min_distance										#add to the total distance
+		if (len(local_requests) > 0):				
+			min_distance = abs(local_head_position - max(local_requests))	#Generate new min_distance from updated local_requests for comparison
+			end = max(local_requests)
 
 	return final_distance
 print ("The total distance that the disk arm moves for SSTF disk-scheduling is", SSTF(requests))
@@ -54,20 +54,20 @@ def SCAN(requests):
 	local_requests = copy.copy(requests)
 	total_distance = 0
 
-	end = max(local_requests)
-	max_queue = 4999
+	end = max(local_requests)								#maximum cylinder accessed
+	max_queue = 4999										#the total size of cylinder
 
-	for i in range(local_head_position, end):
+	for i in range(local_head_position, end+1):				#this function adds all the distance from current to the max value of cylinder in array
 		if (i in local_requests):
 			total_distance += abs(local_head_position - i)
 			local_head_position = i
 			local_requests.remove(i)
 
-	total_distance += abs(local_head_position - max_queue)
-	local_head_position = max_queue
+	total_distance += abs(local_head_position - max_queue)	#add the distance from max value of cylinder in array to the end of cylinder
+	local_head_position = max_queue							#set current head to end of cylinder
 
-	count = end 
-	while count >= 0:
+	count = end 	
+	while count >= 0:										#calculate the distance from the end of the cylinder to the opposite direction
 		if (count in local_requests):
 			total_distance += abs(local_head_position - count)
 			local_head_position = count 
@@ -85,17 +85,17 @@ def CSCAN(requests):
 	end = max(local_requests)
 	max_queue = 4999
 
-	for i in range(local_head_position, end):
+	for i in range(local_head_position, end+1):				#this function adds all the distance from current to the max value of cylinder in array
 		if (i in local_requests):
 			total_distance += abs(local_head_position - i)
 			local_head_position = i
 			local_requests.remove(i)
 
-	total_distance += abs(local_head_position - max_queue)
-	local_head_position = 0
+	total_distance += abs(local_head_position - max_queue)	#add the distance from max value of cylinder in array to the end of cylinder
+	local_head_position = 0									#set current head to start of cylinder
 
-	end = max(local_requests)
-	for y in range (0, end):
+	end = max(local_requests)								#calculate the distance from the start of the cylinder to the value less and close to the initial head position
+	for y in range (0, end+1):
 		if (y in local_requests):
 			total_distance += abs(local_head_position - y)
 			local_head_position = y
@@ -111,14 +111,14 @@ def LOOK(requests):
 
 	end = max(local_requests)
 
-	for i in range(local_head_position, end):
+	for i in range(local_head_position, end+1):				#this function adds all the distance from current to the max value of cylinder in array
 		if (i in local_requests):
 			total_distance += abs(local_head_position - i)
 			local_head_position = i
 			local_requests.remove(i)
 
-	count = end 
-	while count >= 0:
+	count = end 											#calculate the distance from the max value of the cylinder to the opposite direction
+	while count >= 0:										
 		if (count in local_requests):
 			total_distance += abs(local_head_position - count)
 			local_head_position = count 
@@ -135,16 +135,16 @@ def CLOOK(requests):
 
 	end = max(local_requests)
 
-	for i in range(local_head_position, end+1):
+	for i in range(local_head_position, end+1):				#this function adds all the distance from current to the max value of cylinder in array
 		if (i in local_requests):
 			total_distance += abs(local_head_position - i)
 			local_head_position = i
 			local_requests.remove(i)
 
-	local_head_position = min(local_requests)
+	local_head_position = min(local_requests)				#set current head to the minimum in local_requests array
 
 	end = max(local_requests)
-	for y in range (local_head_position, end+1):
+	for y in range (local_head_position, end+1):			#calculate the distance from the minimum value of cylinder to the value less and close to the initial value of head 
 		if (y in local_requests):
 			total_distance += abs(local_head_position - y)
 			local_head_position = y
@@ -152,4 +152,3 @@ def CLOOK(requests):
 
 	return total_distance
 print ("The total distance that the disk arm moves for CLOOK disk-scheduling is", CLOOK(requests))
-
